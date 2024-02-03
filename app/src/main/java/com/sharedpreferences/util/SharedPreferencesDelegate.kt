@@ -2,8 +2,12 @@ package com.sharedpreferences.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
+
+private const val TAG: String = "Test"
+private const val PREFERENCE_NAME: String = "shared_preferences"
 
 /**
  *@param context
@@ -23,7 +27,7 @@ class SharedPreferencesDelegate<T>(
 
     // Name of the preference file under data/data/application_preference package
     private val sharedPreferences by lazy {
-        context.getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
+        context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
     /**
@@ -162,6 +166,37 @@ fun Context.longSP(key: String) =
         SharedPreferences::getLong,
         SharedPreferences.Editor::putLong
     )
+
+/**
+ * For dev debug
+ *
+ * @param context the context
+ */
+fun printAllPreference(context: Context) {
+    val preferences: SharedPreferences =
+        context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    val allEntries = preferences.all
+    if (allEntries.isNotEmpty()) {
+        for ((key, value) in allEntries) {
+            Log.d(TAG, key + ": " + value.toString())
+        }
+    } else {
+        Log.d(TAG, "Shared preferences data is empty")
+    }
+}
+
+/**
+ * Clear all preference data
+ *
+ * @param context the context
+ */
+fun clearAllPreference(context: Context) {
+    val preferences: SharedPreferences =
+        context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+    val editor = preferences.edit()
+    editor.clear()
+    editor.apply()
+}
 
 /**
  * Retrieves a Double preference.

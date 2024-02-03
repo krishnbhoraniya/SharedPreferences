@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SharedPreferences</string>
+    <string name="todo">Todo</string>
+    <string name="check_the_logcat">Check in the logcat</string>
 </resources>
